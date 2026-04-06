@@ -35,17 +35,37 @@ tools = [
 ]
 
 #First LLM Call
-user_input = input("HUMAN INPUT: ")
+#user_input = input("HUMAN INPUT: What is the weather like in Germantown TN zip code? 38139")
+user_input = "What is the weather in Germantown with zip code? 38139" #user input that will be fed to the first LLM call. The LLM will decide which tool to call based on the user input and the tools provided.
 response = client.responses.create(
     model="gpt-5.4-mini",
     input=user_input,
     tools=tools,
 )
 
+tool_output = []
+
 for item in response.output:
     if item.type == "function_call":
         arguments = json.loads(item.arguments)
 
         if item.name == "get_weather":
-            weather_info = get_weather(arguments["zipcode"])
-            print("Weather Information: ", weather_info)
+            result = get_weather(arguments["zipcode"])
+            #print("Weather Information: ", weather_info)
+        else:
+            result = "Unknown Tool executed"
+        #get the output of the tool and append it to the tool_output list
+        tool_output.append({
+            "type": "function_call_output",
+            "call_id": item.call_id,
+            "output": json.dumps(result),
+        })
+
+#Second LLM Call is fed with the output of the tool and the previous response id to maintain the context of the conversation. The final response will be generated based on the tool output and the previous response.
+final_response = client.responses.create(
+    model="gpt-5.4-mini",
+    input=tool_output,
+    previous_response_id=response.id
+)
+
+print("FINAL RESPONSE: ", final_response.output_text)
