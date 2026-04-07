@@ -54,7 +54,7 @@ tools = [
 user_input = input("HUMAN INPUT: ")
 #user_input = "What is the weather in Germantown with zip code? 38139" #user input that will be fed to the first LLM call. The LLM will decide which tool to call based on the user input and the tools provided.
 response = client.responses.create(
-    model="gpt-5.4-mini",
+    model="gpt-5.4",
     input=user_input,
     tools=tools,
 )
@@ -62,8 +62,12 @@ response = client.responses.create(
 #second LLM Call
 def run_shell(command):
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    return result.stdout.strip()
-
+    return {
+    "command": command,
+    "stdout": result.stdout.strip(),
+    "stderr": result.stderr.strip(),
+    "returncode": result.returncode
+    }
 tool_output = []
 
 for item in response.output:
