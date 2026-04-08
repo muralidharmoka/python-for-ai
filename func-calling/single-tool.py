@@ -7,6 +7,7 @@ load_dotenv()  #load environment variables from .env file
 client = OpenAI() #initialize OpenAI client     
 # Define a function to get weather information using OpenWeatherMap API
 #create our AI Tool
+import subprocess
 
 def get_weather(zipcode):
     apikey = os.getenv("OPEN_WEATHERMAP_API_KEY")
@@ -43,6 +44,11 @@ response = client.responses.create(
     tools=tools,
 )
 
+#second LLM Call
+def run_shell(command):
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    return result.stdout.strip()
+
 tool_output = []
 
 for item in response.output:
@@ -52,6 +58,7 @@ for item in response.output:
         if item.name == "get_weather":
             result = get_weather(arguments["zipcode"])
             #print("Weather Information: ", weather_info)
+            
         else:
             result = "Unknown Tool executed"
         #get the output of the tool and append it to the tool_output list
