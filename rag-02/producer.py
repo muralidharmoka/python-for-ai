@@ -7,7 +7,7 @@ redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
 def send_to_queue(query): 
     job_id = str(uuid.uuid4())  # Generate a unique ID for the query   
     payload = {
-        "id": job_id,  # Use the generated job ID
+        "job_id": job_id,  # Use the generated job ID
         "query": query
     }
     redis_client.rpush("query_queue", str(payload))  # Push the payload to the Redis list (queue)
