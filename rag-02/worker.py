@@ -3,6 +3,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from openai import OpenAI
 import redis
+import ast
 
 #Environment Setup
 load_dotenv()  # Carga las variables de entorno desde el archivo .env
@@ -19,6 +20,6 @@ def pull_from_queue():
         payload = redis_client.blpop("query_queue", timeout=0)  # Block until a new query is available
         if payload:
             _, data = payload
-            print(data)  # Convert string back to dictionary
+            print(ast.literal_eval(data))  #data is string, Convert string back to dictionary
 
 pull_from_queue()
