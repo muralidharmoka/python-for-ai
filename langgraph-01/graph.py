@@ -9,16 +9,13 @@ llm = ChatOpenAI(
     model="gpt-5.4-nano",
 )
 
-llm.invoke("Hello world")
-
-#definging state
-
+#DEFINT STATE OBJECT
 class SupportState(TypedDict):
     user_query: str
     intent: str
     response: str
 
-#defing nodes or agents, intent classifier
+#DEFINE CLSSFIER NODE
 #below is a simple implementation of an intent classifier that uses the LLM to classify the user's query into one of the predefined categories. 
 #The function takes the current state as input and returns the classified intent as a string.
 def intent_classifier(state: SupportState):
@@ -32,20 +29,21 @@ def intent_classifier(state: SupportState):
     result = llm.invoke(prompt)
     return {"intent": result.content.strip().lower()}  #return the classified intent in lowercase
 
-#NODE2 :Order Tracking Node
+#NODE2 :DEFINE ORDER TRACKING NODE
 def handle_order(state: SupportState):
     return{
     "response": ("You can track your orders from the 'My Orders' section."
                  "You can also track your orders by clicking on 'Recent Orders' in ")
     }
-#NODE3: PASSWORD RESET NODE
+
+#NODE3: DEFINE PASSWORD RESET NODE
 def handle_password(state: SupportState):
     return {
         "response": ("To reset your password, go to the login page and click on 'Forgot Password'."
                      "Follow the instructions to reset your password.")
     }
 
-#NODE4: REFUND NODE
+#NODE4: DEFINE REFUND NODE
 def handle_refund(state: SupportState):
     return {
         "response": ("To request a refund, please contact our support team with your order details."
@@ -82,7 +80,7 @@ graph.add_edge("handle_order", END)
 graph.add_edge("handle_password", END)    
 graph.add_edge("handle_refund", END)
 
-app =graph.compile()  #compile the graph to optimize it for execution    
+app =graph.compile()  #compile the graph    
 
 
 #RUN THE APP
