@@ -62,7 +62,7 @@ def route_intent(state: SupportState):
     elif state["intent"] == "refund":
         return "handle_refund"
     else:
-        END
+       return END
     
 #BUILD YOUR GRAPH
 graph = StateGraph(SupportState)
