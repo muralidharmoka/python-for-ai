@@ -57,10 +57,10 @@ def qa_agent(state: CodeState):
     Evaluate the code based on the following criteria:
     1. Code correctness: Does the code meet the user's request and function as intended?
     2. Structure and organization: Is the code well-structured and organized? Are functions and modules used appropriately?
-    3. Production best practices: Does the code follow best practices for production-ready code, such as error handling, security considerations, and performance optimizations?
+    3. Production best practices: Does the code follow best practices for production-ready code
     4. error handling: Does the code include proper error handling mechanisms to manage potential issues that may arise during execution?
     5. use of variables and functions: Are variables and functions used appropriately, with clear naming conventions and without unnecessary complexity?
-    Provide specific feedback on what is wrong with the code if the rating is less than 5.
+13k on what is wrong with the code if the rating is less than 5.
   
     Return a json in the following format:
     {
@@ -75,3 +75,72 @@ def qa_agent(state: CodeState):
         "rating":int(result['rating']),
         "feedback": result['feedback'],
     }
+
+#NODE:CODE APPROVED
+def set_approved(state: CodeState):
+    return {
+        "status": "approved"
+    }
+
+#Node:CODE FAILED
+def set_failed(state: CodeState):
+    return {
+        "status": "failed"
+    }   
+
+#Node: retry limit reached
+def increment_retry(state: CodeState):
+    return {
+        "retries": state['retries'] + 1,
+    }
+
+#Node check_rating(state:CodeState):
+def check_rating(state: CodeState):
+    if state['rating'] >= 7:
+        return "approved"
+    elif state['retries'] >= MAX_TRIES:
+        return "failed"
+    else:
+        return "retry"
+    
+#BUILD THE GRAPH
+graph = StateGraph(CodeState)
+
+#ADD NODES TO THE GRAPH
+graph.add_node("developer_agent", developer_agent)
+graph.add_node("qa_agent", qa_agent)
+graph.add_node("approved_node", set_approved)
+graph.add_node("failed_node", set_failed)
+graph.add_node("increment_retry", increment_retry)
+#graph.add_node("check_rating", check_rating)
+
+graph.set_entry_point("developer_agent")
+graph.add_edge("developer_agent", "qa_agent")
+graph.add_conditional_edges("qa_agent", check_rating,
+                            {
+                                "approved": "approved_node",
+                                "failed": "failed_node",
+                                "retry": "increment_retry"
+                            })
+graph.add_edge("approved_node", END)
+graph.add_edge("failed_node", END)
+graph.add_edge("increment_retry", "developer_agent")
+
+app = graph.compile()  #compile the graph
+#Execite Graph
+
+user_input = input("Please enter your Nodejs code request: ")
+result = app.invoke({
+    "user_request": user_input,
+    "code": "",
+    "rating": 0,
+    "retries": 0,
+    "feedback": "",
+    "status": ""
+})
+
+print("\nFinal Output :\n")
+print("Code:", result['status'])
+print("Final Rating:", result['rating'])
+print("retries used:", result['retries'])
+print("Feedback:", result['feedback'])
