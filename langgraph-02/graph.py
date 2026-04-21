@@ -114,7 +114,10 @@ graph.add_node("failed_node", set_failed)
 graph.add_node("increment_retry", increment_retry)
 #graph.add_node("check_rating", check_rating)
 
+#SET ENTRY POINT
 graph.set_entry_point("developer_agent")
+
+#SET UP THE EDGES
 graph.add_edge("developer_agent", "qa_agent")
 graph.add_conditional_edges("qa_agent", check_rating,
                             {
@@ -126,9 +129,10 @@ graph.add_edge("approved_node", END)
 graph.add_edge("failed_node", END)
 graph.add_edge("increment_retry", "developer_agent")
 
-app = graph.compile()  #compile the graph
-#Execite Graph
+#Compile the graph
+app = graph.compile()
 
+#RUN THE APP
 user_input = input("Please enter your Nodejs code request: ")
 result = app.invoke({
     "user_request": user_input,
