@@ -21,7 +21,6 @@ llm_qa = ChatOpenAI(
 
 MAX_TRIES = 3
 
-
 class CodeState(TypedDict):
     user_request: str
     code: str
@@ -29,7 +28,6 @@ class CodeState(TypedDict):
     retries: int
     feedback: str
     status: str
-
 
 # NODE 1: DEVELOPER AGENT
 def developer_agent(state: CodeState):
@@ -51,7 +49,6 @@ def developer_agent(state: CodeState):
         "code": result,
         "status": "generated"
     }
-
 
 # NODE 2: QA AGENT
 def qa_agent(state: CodeState):
@@ -85,13 +82,11 @@ def qa_agent(state: CodeState):
         "feedback": parsed["feedback"],
     }
 
-
 # NODE: CODE APPROVED
 def set_approved(state: CodeState):
     return {
         "status": "approved"
     }
-
 
 # NODE: CODE FAILED
 def set_failed(state: CodeState):
@@ -99,13 +94,11 @@ def set_failed(state: CodeState):
         "status": "failed"
     }
 
-
 # NODE: retry limit reached
 def increment_retry(state: CodeState):
     return {
         "retries": state["retries"] + 1,
     }
-
 
 def check_rating(state: CodeState):
     if state["rating"] >= 7:
@@ -114,7 +107,6 @@ def check_rating(state: CodeState):
         return "failed"
     else:
         return "retry"
-
 
 # BUILD THE GRAPH
 graph = StateGraph(CodeState)
