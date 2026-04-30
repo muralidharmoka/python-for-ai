@@ -3,7 +3,7 @@ from mcp.server.fastmcp import FastMCP
 import requests
 import wikipedia
 
-mcp = FastMCP("Support Server", json_response=True)
+mcp = FastMCP("Support Server", json_response=True,host="127.0.0.1",port=8001)
 
 @mcp.tool()
 def wikipedia_search(topic: str):
@@ -30,7 +30,7 @@ def get_order_data(user_id: int):
     """
     GET Order data and delivery information for a user based on 
     their user ID."""
-    url = f"http://localhost:8001/delivery_status/{user_id}"
+    url = f"http://localhost:8000/delivery_status/{user_id}"
     response = requests.get(url)
     if response.status_code != 200:
         return {"error": f"Failed to fetch data for user ID {user_id}. Status code: {response.status_code}"}
