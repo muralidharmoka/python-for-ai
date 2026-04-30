@@ -5,6 +5,7 @@ import wikipedia
 
 mcp = FastMCP("Support Server", json_response=True,host="127.0.0.1",port=8001)
 
+# This tool is designed to fetch a summary of a given topic from Wikipedia.
 @mcp.tool()
 def wikipedia_search(topic: str):
     """
@@ -17,7 +18,7 @@ def wikipedia_search(topic: str):
     except Exception as e:
         return f"An error occurred while fetching the Wikipedia summary: {str(e)}"
 
-
+# This tool is designed to fetch e-commerce data for a given product name.
 @mcp.tool()
 def ecommerce_data(product_name: str):
     """
@@ -25,6 +26,7 @@ def ecommerce_data(product_name: str):
     """
     return f"Data for {product_name} is currently unavailable."
 
+# This tool is designed to fetch order and delivery information for a user based on their user ID.
 @mcp.tool()
 def get_order_data(user_id: int):
     """
