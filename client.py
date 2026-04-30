@@ -35,7 +35,7 @@ async def main():
             # Initialize the connection
             await session.initialize()
             # List available tools
-            tools = await session.list_tools()
-            print(f"Available tools: {[tool.name for tool in tools.tools]}") 
+            tool_list = await session.list_tools()
+            print(tool_list.tools) 
 
 asyncio.run(main()) 
