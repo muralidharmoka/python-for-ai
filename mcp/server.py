@@ -30,7 +30,7 @@ def get_order_data(user_id: int):
     """
     GET Order data and delivery information for a user based on 
     their user ID."""
-    url = f"http://localhost:8000/delivery_status/{user_id}"
+    url = f"http://localhost:8001/delivery_status/{user_id}"
     response = requests.get(url)
     if response.status_code != 200:
         return {"error": f"Failed to fetch data for user ID {user_id}. Status code: {response.status_code}"}
@@ -39,4 +39,4 @@ def get_order_data(user_id: int):
 
 if __name__ == "__main__":
     print("MCP server started. Waiting for client...")
-    mcp.run("transport=""streamable-http")
+    mcp.run(transport="streamable-http")
