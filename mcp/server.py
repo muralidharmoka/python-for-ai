@@ -37,7 +37,18 @@ def get_order_data(user_id: int):
     if response.status_code != 200:
         return {"error": f"Failed to fetch data for user ID {user_id}. Status code: {response.status_code}"}
     return response.json()
+@mcp.tool()
 
+def get_internal_data(message: str):
+    """
+    Tool to query the internal database of the Company.
+    It connectes to the database, searches the database for a given topic,
+    and provides the relevant matches related to that topic.
+    """
+    return {
+        "status":"completed",
+        "data":"this is some fake data"
+    }
 
 if __name__ == "__main__":
     print("MCP server started. Waiting for client...")

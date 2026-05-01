@@ -3,6 +3,7 @@ from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from openai import OpenAI
 from dotenv import load_dotenv
+import json
 
 load_dotenv()  #load environment variables from .env file
 client = OpenAI() #initialize OpenAI client
@@ -55,8 +56,15 @@ async def main():
                     break
             if tool_call:
                 tool_name = tool_call.name
-                args = tool_call.arguments
-                print(f"Calling tool: {tool_name} with arguments: {args}")
-                
-
+                args = json.loads(tool_call.arguments)
+                print(f"Tool called: {tool_name}")
+                result = await session.call_tool(tool_name, args)
+                for item in result.content:
+                    if(hasattr(item, 'text')):
+                        print(item.text)
+                    else:
+                        print(item)
+            else:
+                print("No tool called. Response:", response.output)
+                print(response.output_text)
 asyncio.run(main()) 
