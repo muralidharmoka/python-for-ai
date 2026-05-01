@@ -39,6 +39,7 @@ async def main():
             await session.initialize()
             # List available tools
             tool_list = await session.list_tools()
+            print("Available tools:", tool_list.tools)
             openai_tools = [convert_tools(t) for t in tool_list.tools]
             #print("Available tools:", openai_tools)
 

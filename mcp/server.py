@@ -37,8 +37,8 @@ def get_order_data(user_id: int):
     if response.status_code != 200:
         return {"error": f"Failed to fetch data for user ID {user_id}. Status code: {response.status_code}"}
     return response.json()
-@mcp.tool()
 
+@mcp.tool()
 def get_internal_data(message: str):
     """
     Tool to query the internal database of the Company.
