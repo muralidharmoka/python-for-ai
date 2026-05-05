@@ -1,0 +1,8 @@
+#this file will basically tell prometheus to get the metricc from the application.
+global:
+  scrape_interval: 15s
+scape_configs:
+  - job_name: 'genai-application'
+    metrics_path: '/metrics'
+    static_configs:
+    - targets: ['192.168.159.99:8000']#http://192.168.159.99:8000/metrics
