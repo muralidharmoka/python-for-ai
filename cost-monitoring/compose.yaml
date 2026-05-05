@@ -9,13 +9,13 @@ services:
     networks:
       - monitoring
 
-grafana:
-    image: docker.io/grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    networks:
-      - monitoring
+  grafana:
+      image: docker.io/grafana/grafana:latest
+      container_name: grafana
+      ports:
+        - "3000:3000"
+      networks:
+        - monitoring
 
-networks:
-  monitoring:{}  #default network with default settings
+  networks:
+    monitoring:{}  #default network with default settings
