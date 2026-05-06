@@ -85,7 +85,7 @@ def ask(q: str):
 
 # ---------------------------------------------------------
 # Run:
-# uvicorn openai_prometheus_app:app --host 0.0.0.0 --port 8000
+# uvicorn app:app --host 0.0.0.0 --port 8000
 # http://localhost:8000/ask?q=What is Kubernetes?  (open in browser to make a call to /ask endpoint and generate some metrics)
 # Then open http://localhost:8000/metrics    (to see the metrics. This will show the prometheus formatted output)
 #
