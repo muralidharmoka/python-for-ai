@@ -35,8 +35,9 @@ openai_tokens = Counter(
 # ---------------------------------------------------------
 app = FastAPI(title="OpenAI + Prometheus Demo")
 
-# Prometheus endpoint
+# Creates Prometheus endpoint
 app.mount("/metrics", make_asgi_app())
+#http://localhost:8000/metrics  (open in browser to see the metrics)
 
 # ---------------------------------------------------------
 # OpenAI Call Wrapper
@@ -85,4 +86,7 @@ def ask(q: str):
 # ---------------------------------------------------------
 # Run:
 # uvicorn openai_prometheus_app:app --host 0.0.0.0 --port 8000
+# http://localhost:8000/ask?q=What is Kubernetes?  (open in browser to make a call to /ask endpoint and generate some metrics)
+# Then open http://localhost:8000/metrics    (to see the metrics.)
+#
 # ---------------------------------------------------------
